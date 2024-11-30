@@ -3,15 +3,17 @@ package com.ecommerce.quickcart.service.product;
 import java.util.List;
 
 import com.ecommerce.quickcart.model.Product;
+import com.ecommerce.quickcart.request.AddProductRequest;
+import com.ecommerce.quickcart.request.UpdateProductRequest;
 
 public interface IProductService {
-    Product addProduct(Product product);
+    Product addProduct(AddProductRequest request);
 
     Product getProductById(Long id);
 
     void deleteProductById(Long id);
 
-    void updateProduct(Product product, Long productId);
+    Product updateProduct(UpdateProductRequest request, Long productId);
 
     List<Product> getAllProducts();
 
