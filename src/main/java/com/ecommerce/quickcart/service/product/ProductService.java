@@ -5,7 +5,7 @@ import java.util.Optional;
 
 import org.springframework.stereotype.Service;
 
-import com.ecommerce.quickcart.exceptions.ProductNotFoundException;
+import com.ecommerce.quickcart.exceptions.ResourceNotFoundException;
 import com.ecommerce.quickcart.model.Category;
 import com.ecommerce.quickcart.model.Product;
 import com.ecommerce.quickcart.repository.CategoryRepository;
@@ -52,14 +52,14 @@ public class ProductService implements IProductService {
 
     @Override
     public Product getProductById(Long id) {
-        return productRepository.findById(id).orElseThrow(() -> new ProductNotFoundException("Product Not Found"));
+        return productRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("Product Not Found"));
     }
 
     @Override
     public void deleteProductById(Long id) {
         productRepository.findById(id).ifPresentOrElse(
             productRepository::delete, 
-            () -> {throw new ProductNotFoundException("Product not found");}
+            () -> {throw new ResourceNotFoundException("Product not found");}
         );
     }
 
@@ -68,7 +68,7 @@ public class ProductService implements IProductService {
         return productRepository.findById(productId)
                 .map(existingProduct -> updateExistingProduct(existingProduct, request))
                 .map(productRepository::save)
-                .orElseThrow(() -> new ProductNotFoundException("Product not found"));
+                .orElseThrow(() -> new ResourceNotFoundException("Product not found"));
     }
 
     // HELPER METHOD
