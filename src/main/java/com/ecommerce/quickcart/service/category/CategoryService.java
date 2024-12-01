@@ -1,9 +1,11 @@
 package com.ecommerce.quickcart.service.category;
 
 import java.util.List;
+import java.util.Optional;
 
 import org.springframework.stereotype.Service;
 
+import com.ecommerce.quickcart.exceptions.AlreadyExistsException;
 import com.ecommerce.quickcart.exceptions.ResourceNotFoundException;
 import com.ecommerce.quickcart.model.Category;
 import com.ecommerce.quickcart.repository.CategoryRepository;
@@ -32,12 +34,17 @@ public class CategoryService implements ICategoryService {
 
     @Override
     public Category addCategory(Category category) {
-        throw new UnsupportedOperationException("Unimplemented method 'addCategory'");
+        return Optional.of(category).filter(c -> !categoryRepository.existsByName(c.getName()))
+            .map(categoryRepository::save)
+            .orElseThrow(() -> new AlreadyExistsException(category.getName() + " Already Exists"));
     }
 
     @Override
-    public Category updaCategory(Category category) {
-        throw new UnsupportedOperationException("Unimplemented method 'updaCategory'");
+    public Category updaCategory(Category category, Long id) {
+        return Optional.ofNullable(getCategoryById(id)).map(oldCategory -> {
+            oldCategory.setName(category.getName());
+            return categoryRepository.save(oldCategory);
+        }).orElseThrow(() -> new ResourceNotFoundException("Category Not Found"));
     }
 
     @Override
@@ -47,5 +54,4 @@ public class CategoryService implements ICategoryService {
             () -> {throw new ResourceNotFoundException("Category not found");}
         );
     }
-    
 }
