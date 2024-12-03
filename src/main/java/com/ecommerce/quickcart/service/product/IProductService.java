@@ -2,6 +2,7 @@ package com.ecommerce.quickcart.service.product;
 
 import java.util.List;
 
+import com.ecommerce.quickcart.dto.ProductDto;
 import com.ecommerce.quickcart.model.Product;
 import com.ecommerce.quickcart.request.AddProductRequest;
 import com.ecommerce.quickcart.request.UpdateProductRequest;
@@ -28,4 +29,8 @@ public interface IProductService {
     List<Product> getProductsByBrandAndName(String brand, String name);
 
     Long countProductsByBrandAndName(String brand, String name);
+
+    List<ProductDto> getConvertedProducts(List<Product> products);
+
+    ProductDto convertToDto(Product product);
 }
