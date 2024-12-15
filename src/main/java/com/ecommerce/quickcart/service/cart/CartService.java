@@ -4,6 +4,7 @@ import java.math.BigDecimal;
 import java.util.concurrent.atomic.AtomicLong;
 
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.ecommerce.quickcart.exceptions.ResourceNotFoundException;
 import com.ecommerce.quickcart.model.Cart;
@@ -29,6 +30,7 @@ public class CartService implements ICartService  {
         return cartRepository.save(cart);
     }
 
+    @Transactional
     @Override
     public void clearCart(Long id) {
         Cart cart = getCart(id);
