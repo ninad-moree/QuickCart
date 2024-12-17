@@ -1,5 +1,6 @@
 package com.ecommerce.quickcart.service.user;
 
+import com.ecommerce.quickcart.dto.UserDto;
 import com.ecommerce.quickcart.model.User;
 import com.ecommerce.quickcart.request.CreateUserRequest;
 import com.ecommerce.quickcart.request.UpdateUserRequest;
@@ -12,4 +13,6 @@ public interface IUserService {
     User updateUser(UpdateUserRequest request, Long userId);
 
     void deleteUser(Long userId);
+
+    UserDto convertToDto(User user);
 }
