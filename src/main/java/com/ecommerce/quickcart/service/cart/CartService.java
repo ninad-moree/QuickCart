@@ -1,13 +1,15 @@
 package com.ecommerce.quickcart.service.cart;
 
 import java.math.BigDecimal;
-import java.util.concurrent.atomic.AtomicLong;
+import java.util.Optional;
+// import java.util.concurrent.atomic.AtomicLong;
 
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.ecommerce.quickcart.exceptions.ResourceNotFoundException;
 import com.ecommerce.quickcart.model.Cart;
+import com.ecommerce.quickcart.model.User;
 import com.ecommerce.quickcart.repository.CartItemRepository;
 import com.ecommerce.quickcart.repository.CartRepository;
 
@@ -18,7 +20,7 @@ import lombok.RequiredArgsConstructor;
 public class CartService implements ICartService  {
     private final CartRepository cartRepository;
     private final CartItemRepository cartItemRepository;
-    private final AtomicLong cartIdGenerator = new AtomicLong(0);
+    // private final AtomicLong cartIdGenerator = new AtomicLong(0);
 
     @Override
     public Cart getCart(Long id) {
@@ -46,11 +48,12 @@ public class CartService implements ICartService  {
     }
 
     @Override
-    public Long inititalizeNewCart() {
-        Cart newCart = new Cart();
-        Long newCartId = cartIdGenerator.incrementAndGet();
-        newCart.setId(newCartId);
-        return cartRepository.save(newCart).getId();
+    public Cart inititalizeNewCart(User user) {
+        return Optional.ofNullable(getCartByUserId(user.getId())).orElseGet(() -> {
+            Cart cart = new Cart();
+            cart.setUser(user);
+            return cartRepository.save(cart);
+        });
     }
 
     @Override
