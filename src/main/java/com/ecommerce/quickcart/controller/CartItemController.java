@@ -18,6 +18,7 @@ import com.ecommerce.quickcart.service.cart.ICartItemService;
 import com.ecommerce.quickcart.service.cart.ICartService;
 import com.ecommerce.quickcart.service.user.IUserService;
 
+import io.jsonwebtoken.JwtException;
 import lombok.RequiredArgsConstructor;
 
 @RequiredArgsConstructor
@@ -31,13 +32,16 @@ public class CartItemController {
     @PostMapping("/item/add")
     public ResponseEntity<ApiResponse> addItemToCart( @RequestParam Long productId, @RequestParam Integer quantity) {
         try {
-            User user = userService.getUserById(1L);
+            // User user = userService.getUserById(1L);
+            User user = userService.getAuthenticatedUser();
             Cart cart = cartService.inititalizeNewCart(user);
             
             cartItemService.addItemToCart(cart.getId(), productId, quantity);
             return ResponseEntity.ok(new ApiResponse("Item added successfully", null));
         } catch (ResourceNotFoundException e) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new ApiResponse(e.getMessage(), null));
+        } catch (JwtException e) {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(new ApiResponse(e.getMessage(), null));
         }
     }
 
