@@ -8,6 +8,7 @@ import org.springframework.stereotype.Service;
 
 import com.ecommerce.quickcart.dto.ImageDto;
 import com.ecommerce.quickcart.dto.ProductDto;
+import com.ecommerce.quickcart.exceptions.AlreadyExistsException;
 import com.ecommerce.quickcart.exceptions.ResourceNotFoundException;
 import com.ecommerce.quickcart.model.Category;
 import com.ecommerce.quickcart.model.Image;
@@ -34,6 +35,10 @@ public class ProductService implements IProductService {
         // YES -> set it as the new product category; 
         // NO  -> save it as a new category and then set it as the new product category;
 
+        if(productExists(request.getName(), request.getBrand())) {
+            throw new AlreadyExistsException(request.getBrand() + " " + request.getName() + " already exists");
+        }
+
         Category category = Optional
             .ofNullable(categoryRepository.findByName(request.getCategory().getName()))
             .orElseGet(() -> {
@@ -55,6 +60,10 @@ public class ProductService implements IProductService {
             request.getDescription(),
             category
         );
+    }
+
+    private boolean productExists(String name, String brand) {
+        return productRepository.existsByNameAndBrand(name, brand);
     }
 
     @Override
