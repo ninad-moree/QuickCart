@@ -1,4 +1,4 @@
-package com.ecommerce.quickcart.config;
+package com.ecommerce.quickcart.security.config;
 
 import org.modelmapper.ModelMapper;
 import org.springframework.context.annotation.Bean;
