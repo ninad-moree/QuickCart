@@ -4,9 +4,11 @@ import java.math.BigDecimal;
 import java.util.Optional;
 // import java.util.concurrent.atomic.AtomicLong;
 
+import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.ecommerce.quickcart.dto.CartDto;
 import com.ecommerce.quickcart.exceptions.ResourceNotFoundException;
 import com.ecommerce.quickcart.model.Cart;
 import com.ecommerce.quickcart.model.User;
@@ -20,6 +22,7 @@ import lombok.RequiredArgsConstructor;
 public class CartService implements ICartService  {
     private final CartRepository cartRepository;
     private final CartItemRepository cartItemRepository;
+    private final ModelMapper modelMapper;
     // private final AtomicLong cartIdGenerator = new AtomicLong(0);
 
     @Override
@@ -59,6 +62,11 @@ public class CartService implements ICartService  {
     @Override
     public Cart getCartByUserId(Long userId) {
         return cartRepository.findByUserId(userId);
+    }
+
+    @Override
+    public CartDto convertToDto(Cart cart) {
+        return modelMapper.map(cart, CartDto.class);
     }
 
 }

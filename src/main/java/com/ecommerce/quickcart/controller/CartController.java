@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.ecommerce.quickcart.dto.CartDto;
 import com.ecommerce.quickcart.exceptions.ResourceNotFoundException;
 import com.ecommerce.quickcart.model.Cart;
 import com.ecommerce.quickcart.response.ApiResponse;
@@ -27,7 +28,8 @@ public class CartController {
     public ResponseEntity<ApiResponse> getCart(@PathVariable Long cartId) {
         try {
             Cart cart = cartService.getCart(cartId);
-            return ResponseEntity.ok(new ApiResponse("success", cart));
+            CartDto cartDto = cartService.convertToDto(cart);
+            return ResponseEntity.ok(new ApiResponse("success", cartDto));
         } catch (ResourceNotFoundException e) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new ApiResponse(e.getMessage(), null));
         }
