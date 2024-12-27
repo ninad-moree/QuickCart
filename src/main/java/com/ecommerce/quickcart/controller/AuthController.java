@@ -1,11 +1,14 @@
 package com.ecommerce.quickcart.controller;
 
+import java.util.List;
+
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
+import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -37,7 +40,8 @@ public class AuthController {
             SecurityContextHolder.getContext().setAuthentication(authentication);
             String jwt = jwtUtils.generateTokenForUser(authentication);
             CustomUserDetail userDetail = (CustomUserDetail) authentication.getPrincipal();
-            JwtResponse jwtResponse = new JwtResponse(userDetail.getId(), jwt);
+            List<String> roles = userDetail.getAuthorities().stream().map(GrantedAuthority::getAuthority).toList();
+            JwtResponse jwtResponse = new JwtResponse(userDetail.getId(), userDetail.getEmail(), jwt, roles);
 
             return ResponseEntity.ok(new ApiResponse("Login Success", jwtResponse));
         } catch (AuthenticationException e) {
