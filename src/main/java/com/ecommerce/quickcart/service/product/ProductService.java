@@ -65,6 +65,7 @@ public class ProductService implements IProductService {
     private boolean productExists(String name, String brand) {
         return productRepository.existsByNameAndBrand(name, brand);
     }
+    // HELPER METHOD
 
     @Override
     public Product getProductById(Long id) {

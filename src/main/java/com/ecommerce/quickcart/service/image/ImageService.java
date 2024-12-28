@@ -42,7 +42,6 @@ public class ImageService implements IImageService {
     public List<ImageDto> saveImages(List<MultipartFile> files, Long productId) {
         Product product = productService.getProductById(productId);
 
-        // What we have to return
         List<ImageDto> savedImageDto = new ArrayList<>();
 
         for(MultipartFile file : files) {

@@ -34,10 +34,9 @@ public class OrderService implements IOrderService {
     @Override
     public Order placeOrder(Long userId) {
         Cart cart = cartService.getCartByUserId(userId);
-
         Order order = createOrder(cart);
-
         List<OrderItem> orderItems = createOrderItems(order, cart);
+
         order.setOrderItems(new HashSet<>(orderItems));
         order.setTotalAmount(calculateTotalAmount(orderItems));
         Order savedOrder = orderRepository.save(order);
@@ -83,8 +82,8 @@ public class OrderService implements IOrderService {
     @Override
     public OrderDto getOrder(Long orderId) {
         return orderRepository.findById(orderId)
-                                .map(this::convertToDto)
-                                .orElseThrow(() -> new ResourceNotFoundException("Order not found"));
+                            .map(this::convertToDto)
+                            .orElseThrow(() -> new ResourceNotFoundException("Order not found"));
     }
 
     @Override
