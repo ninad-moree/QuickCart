@@ -34,6 +34,7 @@ public class ShopConfig {
     private final CustomUserDetailService userDetailService;
     private final JwtAuthEntryPoint authEntryPoint;
 
+    // List of URLs that would need authentication(user to be logged in before accessing the API)
     private static final List<String> SECURED_URLS = List.of(
         "/api/v1/carts/**", 
         "/api/v1/cartItems/**"
